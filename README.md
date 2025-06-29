@@ -113,7 +113,7 @@ If you use NBSeer in your research, please cite:
 ```bibtex
 @software{nbseer_2025,
   title={NBSeer: Intelligent Plant NBS Gene Annotation Tool},
-  author={NBSeer Development Team},
+  author={LIU Qian, LIU Pingbo, DAI Liangying, CHEN Wu, LIU Tianbo, LU Yaoxiong, WANG Yunsheng},
   year={2025},
   version={0.1.0},
   url={https://github.com/hnnd/nbseer}
