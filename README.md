@@ -26,9 +26,16 @@ Plant NBS disease resistance genes are crucial for plant immunity but are challe
 ### 1. Installation
 
 ```bash
+# Create conda env
+conda create -n nbseer python=3.11
+conda activate nbseer
+
 # Clone the repository
 git clone https://github.com/hnnd/nbseer.git
 cd nbseer
+
+# Install dependencies
+./install_system_deps.sh
 
 # Automated installation
 ./setup_tools.sh

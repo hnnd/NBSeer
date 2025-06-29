@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # NBSeer System Dependencies Installer
-# Install system dependencies using conda and Python environment with uv
+# Install system dependencies and Python environment using conda
 
 set -e
 
@@ -13,7 +13,7 @@ BLUE='\033[0;34m'
 NC='\033[0m'
 
 echo -e "${BLUE}🔧 NBSeer System Dependencies Installation${NC}"
-echo -e "${BLUE}Installing system dependencies with conda and Python environment with uv${NC}"
+echo -e "${BLUE}Installing system dependencies and Python environment with conda${NC}"
 echo ""
 
 # Detect operating system
@@ -152,7 +152,7 @@ verify_installation() {
     fi
     
     # Check basic commands in conda environment
-    for cmd in wget curl tar make gcc g++ perl python java uv; do
+    for cmd in wget curl tar make gcc g++ perl python java; do
         if ! command -v "$cmd" &> /dev/null; then
             missing+=("$cmd")
         else
@@ -160,11 +160,11 @@ verify_installation() {
         fi
     done
     
-    # Check if virtual environment exists
-    if [ -d ".venv" ]; then
-        echo -e "${GREEN}  ✓ Python virtual environment (.venv)${NC}"
+    # Check if conda environment nbseer exists
+    if conda env list | grep -q "nbseer"; then
+        echo -e "${GREEN}  ✓ Conda environment (nbseer)${NC}"
     else
-        echo -e "${YELLOW}  ⚠ Virtual environment not found${NC}"
+        echo -e "${YELLOW}  ⚠ Conda environment not found${NC}"
     fi
     
     # Check Java version
@@ -188,9 +188,9 @@ verify_installation() {
     fi
 }
 
-# Install uv and setup Python environment
-install_uv_and_python_env() {
-    echo -e "${YELLOW}🐍 Installing uv and setting up Python environment...${NC}"
+# Setup Python environment with conda
+setup_conda_python_env() {
+    echo -e "${YELLOW}🐍 Setting up conda Python environment...${NC}"
     
     # Ensure conda environment is activated
     if command -v conda &> /dev/null; then
@@ -198,50 +198,31 @@ install_uv_and_python_env() {
         conda activate base
     fi
     
-    # Check if uv is already installed
-    if command -v uv &> /dev/null; then
-        echo "uv is already installed"
-        uv --version
+    # Create NBSeer conda environment from environment.yml
+    if conda env list | grep -q "nbseer"; then
+        echo "NBSeer conda environment already exists"
+        echo "Updating environment from environment.yml..."
+        conda env update -n nbseer -f environment.yml
+        conda activate nbseer
     else
-        echo "Installing uv..."
-        curl -LsSf https://astral.sh/uv/install.sh | sh
-        export PATH="$HOME/.cargo/bin:$PATH"
+        echo "Creating NBSeer conda environment from environment.yml..."
+        if [ -f "environment.yml" ]; then
+            conda env create -f environment.yml
+        else
+            echo "environment.yml not found, creating basic environment..."
+            conda create -y -n nbseer python=3.11
+        fi
+        conda activate nbseer
+        echo "NBSeer conda environment created"
     fi
     
-    # Check if we're in a project directory with pyproject.toml
+    # Install project dependencies if pyproject.toml exists
     if [ -f "pyproject.toml" ]; then
-        echo "Creating virtual environment and installing dependencies with uv..."
-        uv venv .venv
-        echo "Virtual environment created at .venv"
-        
-        echo "Installing project dependencies..."
-        uv pip install -e .
-        
-        echo "Installing additional bioinformatics tools..."
-        uv pip install \
-            gffutils \
-            intervaltree \
-            psutil
-    else
-        echo "No pyproject.toml found. Creating basic Python environment..."
-        uv venv .venv
-        echo "Virtual environment created at .venv"
-        
-        echo "Installing basic dependencies..."
-        uv pip install \
-            biopython \
-            pandas \
-            numpy \
-            matplotlib \
-            seaborn \
-            pyyaml \
-            requests \
-            gffutils \
-            intervaltree \
-            psutil
+        echo "Installing project in development mode..."
+        pip install -e .
     fi
     
-    echo -e "${GREEN}✓ Python environment setup with uv completed${NC}"
+    echo -e "${GREEN}✓ Python environment setup with conda completed${NC}"
 }
 
 # Main function
@@ -267,8 +248,8 @@ main() {
             ;;
     esac
     
-    # Install uv and Python environment
-    install_uv_and_python_env
+    # Setup Python environment with conda
+    setup_conda_python_env
     
     # Verify installation
     if verify_installation; then
@@ -277,7 +258,7 @@ main() {
         echo ""
         echo -e "${BLUE}Next steps:${NC}"
         echo "1. Restart shell or run: source ~/.bashrc"
-        echo "2. Activate Python environment: source .venv/bin/activate"
+        echo "2. Activate NBSeer environment: conda activate nbseer"
         echo "3. Install bioinformatics tools: ./setup_tools.sh"
         echo "4. Load environment configuration: source setup_env.sh"
         echo "5. Verify tools installation: ./verify_tools.sh"

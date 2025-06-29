@@ -1,0 +1,58 @@
+name: nbseer
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  # Base system dependencies
+  - python=3.11
+  - pip
+  
+  # Development tools
+  - gcc_linux-64
+  - gxx_linux-64
+  - make
+  - cmake
+  - git
+  
+  # System libraries
+  - wget
+  - curl
+  - tar
+  - bzip2
+  - perl
+  - openjdk
+  - zlib
+  - xz
+  - ncurses
+  - openssl
+  - libffi
+  - gsl
+  - sqlite
+  
+  # Python scientific stack
+  - numpy>=1.24
+  - pandas>=2.0
+  - matplotlib>=3.10
+  - seaborn>=0.13
+  - scipy>=1.16
+  - scikit-learn>=1.7
+  
+  # Bioinformatics packages
+  - biopython>=1.81
+  
+  # Development and testing
+  - pytest>=7.0
+  - pytest-cov>=4.0
+  - ruff>=0.12
+  
+  # Additional utilities
+  - pyyaml>=6.0
+  - tqdm>=4.67
+  - psutil>=7.0
+  
+  # Packages only available via pip
+  - pip:
+    - bcbio-gff>=0.7.1
+    - gffutils>=0.13
+    - intervaltree>=3.1.0

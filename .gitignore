@@ -11,6 +11,7 @@
 *.fa.fai
 
 CLAUDE.md
+nohup.out
 .claude/
 docs/
 examples/
@@ -92,23 +93,6 @@ wheels/
 .Trashes
 ehthumbs.db
 Thumbs.db
-
-# ============================================================================
-# Analysis and Documentation Outputs
-# ============================================================================
-# Generated figures
-*.png
-*.svg
-*.pdf
-*.eps
-
-# Generated tables
-*.csv
-*.tsv
-*.tex
-
-# Analysis reports
-*.html
 
 # ============================================================================
 # Backup and Temporary Files
