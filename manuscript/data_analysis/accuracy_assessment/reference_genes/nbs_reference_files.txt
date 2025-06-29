@@ -1,0 +1,6 @@
+# NBS Reference Gene Files for Accuracy Assessment
+# Format: dataset_name:gff_file:gene_list_file
+# Generated on: Sun 29 Jun 2025 10:37:24 AM CST
+pepper:/home/wangys/data/work/nbs/manuscript/data_analysis/accuracy_assessment/reference_genes/pepper/pepper_nbs_genes.gff:/home/wangys/data/work/nbs/manuscript/data_analysis/accuracy_assessment/reference_genes/pepper/pepper_nbs_gene_list.txt
+rice:/home/wangys/data/work/nbs/manuscript/data_analysis/accuracy_assessment/reference_genes/rice/rice_nbs_genes.gff:/home/wangys/data/work/nbs/manuscript/data_analysis/accuracy_assessment/reference_genes/rice/rice_nbs_gene_list.txt
+arabidopsis:/home/wangys/data/work/nbs/manuscript/data_analysis/accuracy_assessment/reference_genes/arabidopsis/arabidopsis_nbs_genes.gff:/home/wangys/data/work/nbs/manuscript/data_analysis/accuracy_assessment/reference_genes/arabidopsis/arabidopsis_nbs_gene_list.txt

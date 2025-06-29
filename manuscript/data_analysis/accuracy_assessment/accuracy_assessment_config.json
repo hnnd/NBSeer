@@ -1,0 +1,34 @@
+{
+  "accuracy_assessment": {
+    "reference_datasets": {
+      "arabidopsis": {
+        "reference_gff": "manuscript/data_analysis/accuracy_assessment/reference_genes/arabidopsis/arabidopsis_nbs_genes.gff",
+        "gene_list": "manuscript/data_analysis/accuracy_assessment/reference_genes/arabidopsis/arabidopsis_nbs_gene_list.txt",
+        "prediction_gff": "results_tair10/evidence_integration/final_annotations.gff"
+      },
+      "rice": {
+        "reference_gff": "manuscript/data_analysis/accuracy_assessment/reference_genes/rice/rice_nbs_genes.gff",
+        "gene_list": "manuscript/data_analysis/accuracy_assessment/reference_genes/rice/rice_nbs_gene_list.txt",
+        "prediction_gff": "results_osa/evidence_integration/final_annotations.gff"
+      },
+      "pepper": {
+        "reference_gff": "manuscript/data_analysis/accuracy_assessment/reference_genes/pepper/pepper_nbs_genes.gff",
+        "gene_list": "manuscript/data_analysis/accuracy_assessment/reference_genes/pepper/pepper_nbs_gene_list.txt",
+        "prediction_gff": "results_cm334/evidence_integration/final_annotations.gff"
+      }
+    },
+    "evaluation_methods": {
+      "overlap_threshold": 0.5,
+      "allow_partial_overlap": true,
+      "evaluate_gene_level": true,
+      "evaluate_exon_level": true,
+      "evaluate_nucleotide_level": true
+    },
+    "output_settings": {
+      "output_dir": "manuscript/data_analysis/results/accuracy_assessment",
+      "generate_plots": true,
+      "plot_format": "svg",
+      "save_detailed_results": true
+    }
+  }
+}

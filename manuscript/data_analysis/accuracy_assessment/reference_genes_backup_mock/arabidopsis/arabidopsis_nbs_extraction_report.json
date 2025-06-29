@@ -1,0 +1,23 @@
+{
+  "dataset_name": "arabidopsis",
+  "extraction_date": "2025-06-29T09:55:07.314811",
+  "input_files": {
+    "genome_file": "manuscript/data/genome/tair10.fa",
+    "gff_file": "manuscript/data/genome/tair10.gff"
+  },
+  "processing_stats": {
+    "total_chromosomes": 7,
+    "total_genes_parsed": 27628,
+    "representative_transcripts": 27628,
+    "cds_extracted": 27628,
+    "proteins_translated": 27624,
+    "nbs_genes_identified": 1381
+  },
+  "output_files": {
+    "nbs_genes_gff": "manuscript/data_analysis/accuracy_assessment/reference_genes/arabidopsis/arabidopsis_nbs_genes.gff",
+    "nbs_gene_list": "manuscript/data_analysis/accuracy_assessment/reference_genes/arabidopsis/arabidopsis_nbs_gene_list.txt",
+    "cds_sequences": "manuscript/data_analysis/accuracy_assessment/reference_genes/arabidopsis/arabidopsis_cds.fasta",
+    "protein_sequences": "manuscript/data_analysis/accuracy_assessment/reference_genes/arabidopsis/arabidopsis_proteins.fasta",
+    "hmmsearch_results": "manuscript/data_analysis/accuracy_assessment/reference_genes/arabidopsis/arabidopsis_hmmsearch.out"
+  }
+}

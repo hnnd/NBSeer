@@ -1,0 +1,23 @@
+{
+  "dataset_name": "pepper",
+  "extraction_date": "2025-06-29T10:35:15.279667",
+  "input_files": {
+    "genome_file": "/data/usdata/wangys/work/nbs/manuscript/data/genome/CM334.fa",
+    "gff_file": "/data/usdata/wangys/work/nbs/manuscript/data/genome/CM334.gff"
+  },
+  "processing_stats": {
+    "total_chromosomes": 12,
+    "total_genes_parsed": 30242,
+    "representative_transcripts": 30242,
+    "cds_extracted": 30242,
+    "proteins_translated": 30242,
+    "nbs_genes_identified": 589
+  },
+  "output_files": {
+    "nbs_genes_gff": "/home/wangys/data/work/nbs/manuscript/data_analysis/accuracy_assessment/reference_genes/pepper/pepper_nbs_genes.gff",
+    "nbs_gene_list": "/home/wangys/data/work/nbs/manuscript/data_analysis/accuracy_assessment/reference_genes/pepper/pepper_nbs_gene_list.txt",
+    "cds_sequences": "/home/wangys/data/work/nbs/manuscript/data_analysis/accuracy_assessment/reference_genes/pepper/pepper_cds.fasta",
+    "protein_sequences": "/home/wangys/data/work/nbs/manuscript/data_analysis/accuracy_assessment/reference_genes/pepper/pepper_proteins.fasta",
+    "hmmsearch_results": "/home/wangys/data/work/nbs/manuscript/data_analysis/accuracy_assessment/reference_genes/pepper/pepper_hmmsearch.out"
+  }
+}

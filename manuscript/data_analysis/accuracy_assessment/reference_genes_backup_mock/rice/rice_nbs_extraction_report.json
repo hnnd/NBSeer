@@ -1,0 +1,23 @@
+{
+  "dataset_name": "rice",
+  "extraction_date": "2025-06-29T09:52:38.332552",
+  "input_files": {
+    "genome_file": "/data/usdata/wangys/work/nbs/manuscript/data/genome/osa.fa",
+    "gff_file": "/data/usdata/wangys/work/nbs/manuscript/data/genome/osa.gff"
+  },
+  "processing_stats": {
+    "total_chromosomes": 14,
+    "total_genes_parsed": 39962,
+    "representative_transcripts": 39962,
+    "cds_extracted": 39962,
+    "proteins_translated": 39962,
+    "nbs_genes_identified": 1998
+  },
+  "output_files": {
+    "nbs_genes_gff": "/home/wangys/data/work/nbs/manuscript/data_analysis/accuracy_assessment/reference_genes/rice/rice_nbs_genes.gff",
+    "nbs_gene_list": "/home/wangys/data/work/nbs/manuscript/data_analysis/accuracy_assessment/reference_genes/rice/rice_nbs_gene_list.txt",
+    "cds_sequences": "/home/wangys/data/work/nbs/manuscript/data_analysis/accuracy_assessment/reference_genes/rice/rice_cds.fasta",
+    "protein_sequences": "/home/wangys/data/work/nbs/manuscript/data_analysis/accuracy_assessment/reference_genes/rice/rice_proteins.fasta",
+    "hmmsearch_results": "/home/wangys/data/work/nbs/manuscript/data_analysis/accuracy_assessment/reference_genes/rice/rice_hmmsearch.out"
+  }
+}

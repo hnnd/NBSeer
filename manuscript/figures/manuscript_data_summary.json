@@ -1,0 +1,25 @@
+{
+  "manuscript_data_summary": {
+    "generation_date": "2025-06-29T11:20:11.345487",
+    "figures_generated": [
+      "FigureS1_Gene_Features_Analysis.svg",
+      "Figure1_Pipeline_Workflow.svg",
+      "FigureS2_Performance_Details.svg",
+      "Figure3_Performance_Benchmarks.svg",
+      "Figure2_Accuracy_Assessment.svg"
+    ],
+    "tables_generated": [
+      "Table1_Dataset_Summary.csv"
+    ],
+    "data_sources": {
+      "runtime_analysis": true,
+      "accuracy_assessment": true,
+      "features_analysis": true
+    },
+    "key_statistics": {
+      "total_datasets_analyzed": 3,
+      "total_reference_genes": 1241,
+      "average_f1_score": 0.7183424644039796
+    }
+  }
+}

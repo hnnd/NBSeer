@@ -1,0 +1,24 @@
+NBS Reference Genes Extraction Summary
+Generated on: Sun 29 Jun 2025 10:37:24 AM CST
+=======================================
+
+pepper:
+  Total genes parsed: 30242
+  Proteins translated: 30242
+  NBS genes identified: 589
+  NBS percentage: 1.94%
+
+rice:
+  Total genes parsed: 39962
+  Proteins translated: 39962
+  NBS genes identified: 483
+  NBS percentage: 1.20%
+
+arabidopsis:
+  Total genes parsed: 27628
+  Proteins translated: 27624
+  NBS genes identified: 169
+  NBS percentage: .61%
+
+
+Total NBS genes identified: 1241

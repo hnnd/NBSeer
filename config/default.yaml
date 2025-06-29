@@ -1,0 +1,307 @@
+# NBS Gene Annotation Pipeline - Default Configuration
+# NBS基因注释流水线 - 默认配置
+
+# 项目基本信息 / Project Information
+project:
+  name: "nbs-gene-annotation"
+  version: "0.1.0"
+  description: "植物NBS抗病基因重新注释流水线"
+
+# 输入输出配置 / Input/Output Configuration
+io:
+  # 输入数据目录 / Input data directories
+  input_dir: "data/input"
+  # 输出结果目录 / Output results directory
+  output_dir: "data/output"
+  # 中间文件目录 / Intermediate files directory
+  interim_dir: "data/interim"
+  # 日志文件目录 / Log files directory
+  log_dir: "logs"
+  
+  # 支持的输入文件格式 / Supported input formats
+  supported_formats:
+    genome: [".fa", ".fasta", ".fna"]
+    protein: [".fa", ".fasta", ".faa"]
+    annotation: [".gff", ".gtf", ".gff3"]
+
+# 工具配置 / Tool Configuration
+tools:
+  # NLR-Annotator配置
+  nlr_annotator:
+    executable: "java"
+    jar_path: "tools/nlr-annotator/NLR-Annotator-v2.1b.jar"
+    mot_file: "tools/nlr-annotator/config/mot.txt"
+    store_file: "tools/nlr-annotator/config/store.txt"
+    default_args:
+      - "-Xmx8g"  # 内存限制 / Memory limit
+    parameters:
+      threads: 16  # 并行线程数 / Number of parallel threads
+      seqs_per_thread: 1000  # 每个线程处理的序列数 / Number of sequences per thread
+      distanceWithinMotifCombination: 500  # motif组合内距离 / Distance within motif combination
+      distanceForElongating: 2500  # 延伸距离 / Distance for elongating
+      distanceBetweenMotifCombinations: 50000  # motif组合间距离 / Distance between motif combinations
+    timeout: 3600  # 1小时超时 / 1 hour timeout
+    
+  # Miniprot配置
+  miniprot:
+    executable: "tools/bin/miniprot"
+    parameters:
+      threads: 16
+      output_format: "gff"  # 输出格式 / Output format (gff, gtf, or paf)
+      outs: 0.995  # 输出分数阈值 / Output score threshold (更严格：99.5%)
+      genome_preset: null  # 基因组预设参数
+      max_gap: 5000       # 最大间隙长度
+      max_intron: 10000   # 最大内含子长度
+      enable_quality_filter: true  # 启用质量过滤，移除移码突变和提前终止
+    timeout: 7200  # 2小时超时 / 2 hour timeout
+    
+  # Augustus配置
+  augustus:
+    executable: "tools/bin/augustus"
+    config_dir: "tools/augustus/config/"
+    scripts_path: "tools/augustus/scripts"
+    default_species: "nbs_rice_auto"  # 默认物种模型 / Default species model
+    parameters:
+      genemodel: "complete"
+      singlestrand: false
+      strand: "both"
+      gff3: true
+      uniqueGeneId: true
+    timeout: 1800  # 30分钟超时 / 30 minute timeout
+    
+    # Augustus训练配置 / Augustus training configuration
+    training:
+      # 基于Miniprot结果的训练 / Miniprot-based training
+      miniprot_training:
+        enabled: false  # 默认禁用，通过命令行参数启用 / Disabled by default, enable via command line
+        species_name: "nbs_rice_miniprot"
+        quality_filter: "high"  # high, medium, low, all
+        min_training_genes: 20
+        min_identity_threshold: 0.95
+        max_frameshifts: 0
+        max_stop_codons: 0
+        
+        # 训练数据处理 / Training data processing
+        merge_overlapping_genes: true
+        filter_partial_genes: true
+        add_gene_features: true
+        
+        # autoAugTrain.pl参数 / autoAugTrain.pl parameters
+        flanking_dna_length: 4000
+        optimization_rounds: 1
+        cpus: 24
+        timeout_minutes: 2400  # 40小时超时 / 40 hour timeout
+        
+        # 备份和安全 / Backup and safety
+        backup_existing_model: true
+        create_training_report: true
+      
+      # 传统GenBank格式训练 / Traditional GenBank format training
+      genbank_training:
+        enabled: false
+        species_name: "nbs_rice_genbank"
+        test_data_ratio: 0.2
+        optimization_rounds: 1
+        cross_validation_folds: 5
+        min_gene_level_sensitivity: 0.2
+        parallel_jobs: 4
+        
+        # NBS特定参数 / NBS-specific parameters
+        min_exon_length: 50
+        max_exon_length: 3000
+        min_intron_length: 20
+        max_intron_length: 20000
+        translation_table: 1
+        
+        # 训练质量阈值 / Training quality thresholds
+        min_training_genes: 100
+        max_training_genes: 2000
+    
+  # EVidenceModeler配置
+  evm:
+    executable_dir: "tools/evidencemodeler/"
+    scripts:
+      partition: "EvmUtils/partition_EVM_inputs.pl"
+      convert: "EvmUtils/convert_EVM_outputs_to_GFF3.pl"
+      execute: "EvmUtils/execute_EVM_commands.pl"
+    parameters:
+      segmentSize: 1000000
+      overlapSize: 10000
+      cpu: 24
+    weights:
+      # 证据权重配置 / Evidence weights configuration
+      PROTEIN: 1
+      TRANSCRIPT: 1
+      ABINITIO_PREDICTION: 1
+      OTHER_PREDICTION: 1
+    timeout: 14400  # 4小时超时 / 4 hour timeout
+
+# 后处理工具配置 / Post-processing Tools Configuration
+post_processing:
+  # 基因ID重命名工具 / Gene ID renaming tool
+  gene_renaming:
+    tool_path: "src/nbs_annotation/post_evm_renamer.py"  # 重命名工具路径
+    default_prefix: "NBS"  # 默认前缀 / Default prefix
+    output_dir: "results/renamed_genes"  # 输出目录 / Output directory
+    # 预设前缀 / Preset prefixes
+    preset_prefixes:
+      rice_nipponbare: "OsNB"      # 水稻日本晴 / Rice Nipponbare
+      rice_93_11: "Os93"           # 水稻93-11 / Rice 93-11
+      pepper_cm334: "CaCM334"      # 辣椒CM334 / Pepper CM334
+      pepper_zunla: "CaZunla"      # 辣椒Zunla-1 / Pepper Zunla-1
+      arabidopsis_col0: "AtCol0"   # 拟南芥Col-0 / Arabidopsis Col-0
+      tomato_heinz: "SlHeinz"      # 番茄Heinz / Tomato Heinz
+    # ID格式: 基因{前缀}_{编号}.g, 转录本{前缀}_{编号}.t
+    # ID format: Gene {prefix}_{number}.g, Transcript {prefix}_{number}.t
+    # 例如 / Examples: 
+    #   基因 Genes: NBS_0001.g, CaCM334_0001.g, AtCol0_0001.g
+    #   转录本 Transcripts: NBS_0001.t, CaCM334_0001.t, AtCol0_0001.t
+
+# 数据验证配置 / Data Validation Configuration
+validation:
+  # 严格模式 / Strict mode
+  strict_mode: false
+  
+  # 序列长度限制 / Sequence length limits
+  sequence_limits:
+    min_length: 100
+    max_length: 1000000000  # 1Gb
+    
+  # 文件大小限制 / File size limits
+  file_limits:
+    max_size: 53687091200  # 50GB
+    
+  # 蛋白质序列验证 / Protein sequence validation
+  protein_validation:
+    max_stop_codons: 0.05  # 最大终止密码子比例
+    min_length: 30  # 最小蛋白质长度
+    
+  # 基因组序列验证 / Genome sequence validation
+  genome_validation:
+    max_n_content: 0.8  # 最大N含量比例
+    check_circular: false
+
+# 流水线配置 / Pipeline Configuration
+pipeline:
+  # 并行处理配置 / Parallel processing configuration
+  parallel:
+    max_workers: 4
+    chunk_size: 1000
+    
+  # 内存管理 / Memory management
+  memory:
+    max_memory_gb: 32
+    temp_dir: "/tmp"
+    cleanup_temp: true
+    
+  # 重试策略 / Retry strategy
+  retry:
+    max_attempts: 3
+    backoff_factor: 2
+    
+  # 检查点 / Checkpoints
+  checkpoints:
+    enabled: true
+    save_interval: 1800  # 30分钟保存一次 / Save every 30 minutes
+    
+# 质量控制配置 / Quality Control Configuration
+quality_control:
+  # NLR候选基因过滤 / NLR candidate filtering
+  nlr_filtering:
+    min_length: 300
+    max_length: 10000
+    require_conserved_domains: true
+    
+  # 基因预测过滤 / Gene prediction filtering
+  prediction_filtering:
+    min_exon_length: 50
+    max_intron_length: 10000
+    min_cds_length: 150
+    
+  # 证据整合阈值 / Evidence integration thresholds
+  integration_thresholds:
+    min_evidence_score: 0.1
+    min_support_count: 1
+
+# 输出格式配置 / Output Format Configuration
+output:
+  # GFF输出格式 / GFF output format
+  gff:
+    version: 3
+    include_sequences: false
+    sort_by_position: true
+    
+  # 统计报告 / Statistics reports
+  reports:
+    generate_html: true
+    generate_json: true
+    include_plots: true
+    
+  # 文件命名 / File naming
+  naming:
+    use_timestamp: true
+    prefix: "nbs_annotation"
+    
+# 日志配置 / Logging Configuration
+logging:
+  # 日志级别 / Log level
+  level: "INFO"
+  
+  # 日志格式 / Log format
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  
+  # 日志文件 / Log files
+  files:
+    main: "nbs_annotation.log"
+    error: "nbs_annotation_error.log"
+    debug: "nbs_annotation_debug.log"
+    
+  # 日志轮转 / Log rotation
+  rotation:
+    max_size_mb: 100
+    backup_count: 5
+    
+  # 控制台输出 / Console output
+  console:
+    enabled: true
+    level: "INFO"
+
+# 环境配置 / Environment Configuration
+environment:
+  # 环境变量 / Environment variables
+  variables:
+    AUGUSTUS_CONFIG_PATH: "tools/augustus/config/"
+    AUGUSTUS_SCRIPTS_PATH: "tools/augustus/scripts/"
+    PERL5LIB: "tools/evidencemodeler/"
+    EVM_HOME: "tools/evidencemodeler/"
+    
+  # PATH扩展 / PATH extensions
+  path_extensions:
+    - "tools/bin"
+    - "tools/evidencemodeler/"
+    
+  # 临时目录 / Temporary directories
+  temp_dirs:
+    - "/tmp/nbs_annotation"
+    - "/var/tmp/nbs_annotation"
+
+# 开发配置 / Development Configuration
+development:
+  # 调试模式 / Debug mode
+  debug: false
+  
+  # 测试数据 / Test data
+  test_data:
+    small_genome: "data/test/small_genome.fa"
+    test_proteins: "data/test/test_proteins.fa"
+    expected_output: "data/test/expected_output"
+    
+  # 性能分析 / Performance profiling
+  profiling:
+    enabled: false
+    output_dir: "profiling"
+    
+  # 基准测试 / Benchmarking
+  benchmarking:
+    enabled: false
+    reference_datasets: []

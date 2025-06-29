@@ -1,0 +1,183 @@
+# NBSeer .gitignore - Code and Config Only
+
+# ============================================================================
+# Large Data Files
+# ============================================================================
+# Genome sequences
+*.fa
+*.fasta
+*.fna
+*.fai
+*.fa.fai
+
+# Sequence databases
+*.db
+*.gff.db
+
+# Large data directories
+data/
+genome/
+manuscript/data/
+
+# ============================================================================
+# Analysis Results and Outputs  
+# ============================================================================
+# Pipeline results
+results_*/
+renamed_output/
+
+# Analysis outputs
+manuscript/data_analysis/results/
+manuscript/data_analysis/nohup.out
+manuscript/figures/processed/
+manuscript/figures/raw/
+manuscript/tables/formatted/
+manuscript/tables/raw_data/
+
+# Log files
+*.log
+logs/
+src/nbseer/logs/
+
+# ============================================================================
+# Tool Installations and Binaries
+# ============================================================================
+# Installed tools
+tools/augustus/
+tools/evidencemodeler/
+tools/miniprot/
+tools/nlr-annotator/
+tools/temp/
+tools/bin/
+tools/lib/
+
+# Keep only setup scripts
+!tools/*.sh
+
+# ============================================================================
+# Python Environment
+# ============================================================================
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# ============================================================================
+# Development and IDE
+# ============================================================================
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ============================================================================
+# Analysis and Documentation Outputs
+# ============================================================================
+# Generated figures
+*.png
+*.svg
+*.pdf
+*.eps
+
+# Generated tables
+*.csv
+*.tsv
+*.tex
+
+# Analysis reports
+*.html
+
+# ============================================================================
+# Backup and Temporary Files
+# ============================================================================
+# Backup files
+*.bak
+*.backup
+*.old
+*~
+*.tmp
+*.temp
+
+# Lock files
+uv.lock
+
+# ============================================================================
+# Keep Important Files (Override above exclusions)
+# ============================================================================
+# Configuration files
+!config/
+!evm_config/
+!*.yaml
+!*.yml
+!*.json
+
+# Documentation
+!README.md
+!CLAUDE.md
+!docs/
+!manuscript/drafts/
+!manuscript/README.md
+
+# Source code
+!src/
+!examples/
+
+# Setup scripts
+!setup_*.sh
+!install_*.sh
+!verify_*.sh
+
+# Project files
+!pyproject.toml
+!requirements.txt
+
+# Keep analysis scripts (not results)
+!manuscript/data_analysis/*.py
+!manuscript/data_analysis/*.sh
+!manuscript/data_analysis/README.md
+!manuscript/data_analysis/reports/
+!manuscript/data_analysis/benchmark_scripts/
+!manuscript/data_analysis/statistical_analysis/
+!manuscript/data_analysis/accuracy_assessment/*.py
+!manuscript/data_analysis/accuracy_assessment/*.sh
+!manuscript/data_analysis/accuracy_assessment/*.hmm # Environment files with secrets
+.env
+.env.local
