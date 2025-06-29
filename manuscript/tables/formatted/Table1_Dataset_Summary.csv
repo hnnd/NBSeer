@@ -1,0 +1,4 @@
+Species,Genome Size (Mb),Known NBS,Predicted,Validated,Sensitivity,Specificity,F1-Score
+C. annuum,900,589,775,378,0.642,0.488,0.554
+O. sativa,380,483,549,358,0.741,0.652,0.694
+A. thaliana,120,169,175,156,0.923,0.891,0.907
