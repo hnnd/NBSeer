@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # NBSeer System Dependencies Installer
-# Install system dependencies and Python environment using uv
+# Install system dependencies using conda and Python environment with uv
 
 set -e
 
@@ -13,7 +13,7 @@ BLUE='\033[0;34m'
 NC='\033[0m'
 
 echo -e "${BLUE}🔧 NBSeer System Dependencies Installation${NC}"
-echo -e "${BLUE}Installing system dependencies and Python environment with uv${NC}"
+echo -e "${BLUE}Installing system dependencies with conda and Python environment with uv${NC}"
 echo ""
 
 # Detect operating system
@@ -36,116 +36,23 @@ detect_os() {
     echo -e "${YELLOW}Detected OS: ${OS} ${VERSION}${NC}"
 }
 
-# Ubuntu/Debian system installation
-install_ubuntu_deps() {
-    echo -e "${YELLOW}📦 Installing Ubuntu/Debian dependencies...${NC}"
+# Install conda dependencies
+install_conda_deps() {
+    echo -e "${YELLOW}📦 Installing dependencies with conda...${NC}"
     
-    # Update package list
-    echo "Updating package list..."
-    sudo apt-get update -q
-    
-    # Install basic dependencies
-    echo "Installing basic development tools..."
-    sudo apt-get install -y \
+    # Install basic dependencies through conda
+    echo "Installing basic development tools and libraries..."
+    conda install -y -c conda-forge -c bioconda \
         wget \
         curl \
         tar \
         bzip2 \
-        build-essential \
-        gcc \
-        g++ \
+        gcc_linux-64 \
+        gxx_linux-64 \
         make \
         cmake \
         perl \
-        python3 \
-        python3-pip \
-        default-jre \
-        default-jdk \
-        zlib1g-dev \
-        libbz2-dev \
-        liblzma-dev \
-        libncurses5-dev \
-        libssl-dev \
-        libffi-dev \
-        libgsl-dev \
-        libsqlite3-dev \
-        libmysql++-dev \
-        liblpsolve55-dev \
-        libbamtools-dev \
-        git
-    
-    echo -e "${GREEN}✓ Ubuntu/Debian dependencies installed${NC}"
-}
-
-# CentOS/RHEL/Fedora system installation
-install_redhat_deps() {
-    echo -e "${YELLOW}📦 Installing CentOS/RHEL/Fedora dependencies...${NC}"
-    
-    # Detect package manager
-    if command -v dnf &> /dev/null; then
-        PKG_MGR="dnf"
-    elif command -v yum &> /dev/null; then
-        PKG_MGR="yum"
-    else
-        echo -e "${RED}❌ Package manager not found (yum/dnf)${NC}"
-        exit 1
-    fi
-    
-    # Install basic dependencies
-    echo "Installing basic development tools..."
-    sudo $PKG_MGR groupinstall -y "Development Tools"
-    sudo $PKG_MGR install -y \
-        wget \
-        curl \
-        tar \
-        bzip2 \
-        gcc \
-        gcc-c++ \
-        make \
-        cmake \
-        perl \
-        python3 \
-        python3-pip \
-        java-11-openjdk \
-        java-11-openjdk-devel \
-        zlib-devel \
-        bzip2-devel \
-        xz-devel \
-        ncurses-devel \
-        openssl-devel \
-        libffi-devel \
-        gsl-devel \
-        sqlite-devel \
-        mysql++-devel \
-        lpsolve-devel \
-        bamtools-devel \
-        git
-    
-    echo -e "${GREEN}✓ CentOS/RHEL/Fedora dependencies installed${NC}"
-}
-
-# macOS system installation
-install_macos_deps() {
-    echo -e "${YELLOW}📦 Installing macOS dependencies...${NC}"
-    
-    # Check if Homebrew is installed
-    if ! command -v brew &> /dev/null; then
-        echo "Installing Homebrew..."
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    fi
-    
-    # Install basic dependencies
-    echo "Installing basic development tools..."
-    brew install \
-        wget \
-        curl \
-        tar \
-        bzip2 \
-        gcc \
-        make \
-        cmake \
-        perl \
-        python3 \
+        python=3.11 \
         openjdk \
         zlib \
         bzip2 \
@@ -153,7 +60,78 @@ install_macos_deps() {
         ncurses \
         openssl \
         libffi \
+        gsl \
+        sqlite \
         git
+    
+    echo -e "${GREEN}✓ Conda dependencies installed${NC}"
+}
+
+# Check and install conda if not available
+install_conda() {
+    echo -e "${YELLOW}🐍 Checking conda installation...${NC}"
+    
+    if command -v conda &> /dev/null; then
+        echo "Conda is already installed"
+        conda --version
+        return 0
+    fi
+    
+    echo "Installing Miniconda..."
+    
+    # Detect architecture
+    if [[ $(uname -m) == "x86_64" ]]; then
+        ARCH="x86_64"
+    elif [[ $(uname -m) == "aarch64" ]] || [[ $(uname -m) == "arm64" ]]; then
+        ARCH="aarch64"
+    else
+        echo -e "${RED}❌ Unsupported architecture: $(uname -m)${NC}"
+        exit 1
+    fi
+    
+    # Download and install Miniconda
+    CONDA_URL="https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-${ARCH}.sh"
+    wget -O miniconda.sh "$CONDA_URL"
+    bash miniconda.sh -b -p "$HOME/miniconda3"
+    rm miniconda.sh
+    
+    # Initialize conda
+    source "$HOME/miniconda3/etc/profile.d/conda.sh"
+    conda init bash
+    
+    echo -e "${GREEN}✓ Conda installed successfully${NC}"
+    echo -e "${YELLOW}Please restart your shell or run: source ~/.bashrc${NC}"
+}
+
+# macOS conda installation
+install_macos_conda() {
+    echo -e "${YELLOW}📦 Installing macOS dependencies with conda...${NC}"
+    
+    # Check and install conda for macOS
+    if ! command -v conda &> /dev/null; then
+        echo "Installing Miniconda for macOS..."
+        
+        # Detect architecture
+        if [[ $(uname -m) == "x86_64" ]]; then
+            CONDA_URL="https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh"
+        elif [[ $(uname -m) == "arm64" ]]; then
+            CONDA_URL="https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-arm64.sh"
+        else
+            echo -e "${RED}❌ Unsupported architecture: $(uname -m)${NC}"
+            exit 1
+        fi
+        
+        curl -o miniconda.sh "$CONDA_URL"
+        bash miniconda.sh -b -p "$HOME/miniconda3"
+        rm miniconda.sh
+        
+        # Initialize conda
+        source "$HOME/miniconda3/etc/profile.d/conda.sh"
+        conda init bash zsh
+    fi
+    
+    # Install dependencies with conda
+    install_conda_deps
     
     echo -e "${GREEN}✓ macOS dependencies installed${NC}"
 }
@@ -164,8 +142,17 @@ verify_installation() {
     
     local missing=()
     
-    # Check basic commands
-    for cmd in wget curl tar make gcc g++ perl python3 java uv; do
+    # Check conda environment
+    if command -v conda &> /dev/null; then
+        echo -e "${GREEN}  ✓ conda${NC}"
+        conda_version=$(conda --version)
+        echo -e "${GREEN}    ${conda_version}${NC}"
+    else
+        missing+=("conda")
+    fi
+    
+    # Check basic commands in conda environment
+    for cmd in wget curl tar make gcc g++ perl python java uv; do
         if ! command -v "$cmd" &> /dev/null; then
             missing+=("$cmd")
         else
@@ -186,11 +173,10 @@ verify_installation() {
         echo -e "${GREEN}  ✓ Java: ${java_version}${NC}"
     fi
     
-    # Check development libraries
-    if ldconfig -p 2>/dev/null | grep -q "libz.so" || [ -f /usr/lib/libz.dylib ] || [ -f /opt/homebrew/lib/libz.dylib ]; then
-        echo -e "${GREEN}  ✓ zlib development library${NC}"
-    else
-        missing+=("zlib-dev")
+    # Check conda packages
+    if command -v conda &> /dev/null; then
+        echo -e "${GREEN}  ✓ Conda packages installed${NC}"
+        conda list | grep -E '(gcc|zlib|bzip2|openssl)' | head -3
     fi
     
     if [ ${#missing[@]} -eq 0 ]; then
@@ -205,6 +191,12 @@ verify_installation() {
 # Install uv and setup Python environment
 install_uv_and_python_env() {
     echo -e "${YELLOW}🐍 Installing uv and setting up Python environment...${NC}"
+    
+    # Ensure conda environment is activated
+    if command -v conda &> /dev/null; then
+        source "$(conda info --base)/etc/profile.d/conda.sh"
+        conda activate base
+    fi
     
     # Check if uv is already installed
     if command -v uv &> /dev/null; then
@@ -257,24 +249,21 @@ main() {
     detect_os
     
     case "$OS" in
-        "Ubuntu"*|"Debian"*)
-            install_ubuntu_deps
-            ;;
-        "CentOS"*|"Red Hat"*|"Fedora"*)
-            install_redhat_deps
+        "Ubuntu"*|"Debian"*|"CentOS"*|"Red Hat"*|"Fedora"*|*)
+            # First ensure conda is installed
+            install_conda
+            
+            # Initialize conda environment
+            if [ -f "$HOME/miniconda3/etc/profile.d/conda.sh" ]; then
+                source "$HOME/miniconda3/etc/profile.d/conda.sh"
+                conda activate base
+            fi
+            
+            # Install dependencies with conda
+            install_conda_deps
             ;;
         "Darwin")
-            install_macos_deps
-            ;;
-        *)
-            echo -e "${YELLOW}⚠️  Unrecognized operating system: $OS${NC}"
-            echo -e "${YELLOW}Please manually install the following dependencies:${NC}"
-            echo "  - wget/curl"
-            echo "  - tar, bzip2"
-            echo "  - gcc, g++, make, cmake"
-            echo "  - perl, python3, java"
-            echo "  - zlib, bzip2, xz, ncurses development libraries"
-            exit 1
+            install_macos_conda
             ;;
     esac
     
@@ -287,10 +276,13 @@ main() {
         echo -e "${GREEN}🎉 System dependencies installation completed!${NC}"
         echo ""
         echo -e "${BLUE}Next steps:${NC}"
-        echo "1. Activate Python environment: source .venv/bin/activate"
-        echo "2. Install bioinformatics tools: ./setup_tools.sh"
-        echo "3. Load environment configuration: source setup_env.sh"
-        echo "4. Verify tools installation: ./verify_tools.sh"
+        echo "1. Restart shell or run: source ~/.bashrc"
+        echo "2. Activate Python environment: source .venv/bin/activate"
+        echo "3. Install bioinformatics tools: ./setup_tools.sh"
+        echo "4. Load environment configuration: source setup_env.sh"
+        echo "5. Verify tools installation: ./verify_tools.sh"
+        echo ""
+        echo -e "${YELLOW}Note: If this is your first conda installation, please restart your terminal${NC}"
     else
         echo ""
         echo -e "${RED}❌ System dependencies installation incomplete, please check error messages${NC}"
@@ -298,11 +290,12 @@ main() {
     fi
 }
 
-# Check if running with root privileges
+# Check if running with root privileges (not needed for conda)
 if [ "$EUID" -eq 0 ]; then
-    echo -e "${YELLOW}⚠️  Running as root${NC}"
+    echo -e "${YELLOW}⚠️  Running as root - this is not recommended for conda installation${NC}"
+    echo -e "${YELLOW}Please run as a regular user${NC}"
 else
-    echo -e "${YELLOW}ℹ️  Sudo privileges required for system package installation${NC}"
+    echo -e "${GREEN}✓ Running as regular user - good for conda installation${NC}"
 fi
 
 # Execute main function
