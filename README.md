@@ -99,12 +99,8 @@ results/
 | 500 Mb | ~1 hours | ~24 GB | ~500-1000 |
 | 3 Gb | ~4 hours | ~64 GB | ~500-1000 |
 
-## 🤝 Community
 
-### Contributing
-We welcome contributions! Please see our [Contributing Guidelines](./CONTRIBUTING.md) for details.
-
-### Citation
+## Citation
 If you use NBSeer in your research, please cite:
 
 ```bibtex
