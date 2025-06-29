@@ -16,7 +16,8 @@ pyproject.toml
 .claude/
 docs/
 examples/
-.gitignore
+evm_config/
+
 
 
 # Sequence databases
@@ -48,20 +49,6 @@ manuscript/tables/raw_data/
 logs/
 src/nbseer/logs/
 
-# ============================================================================
-# Tool Installations and Binaries
-# ============================================================================
-# Installed tools
-tools/augustus/
-tools/evidencemodeler/
-tools/miniprot/
-tools/nlr-annotator/
-tools/temp/
-tools/bin/
-tools/lib/
-
-# Keep only setup scripts
-!tools/*.sh
 
 # ============================================================================
 # Python Environment
