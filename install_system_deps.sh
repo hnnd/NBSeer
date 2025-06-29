@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# NBS基因注释流水线系统依赖安装脚本
-# System dependencies installer for NBS annotation pipeline
+# NBSeer System Dependencies Installer
+# Install system dependencies and Python environment using uv
 
 set -e
 
@@ -12,8 +12,8 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m'
 
-echo -e "${BLUE}🔧 NBS基因注释流水线系统依赖安装${NC}"
-echo -e "${BLUE}Installing system dependencies for NBS annotation pipeline${NC}"
+echo -e "${BLUE}🔧 NBSeer System Dependencies Installation${NC}"
+echo -e "${BLUE}Installing system dependencies and Python environment with uv${NC}"
 echo ""
 
 # 检测操作系统
@@ -33,19 +33,19 @@ detect_os() {
         VERSION=$(uname -r)
     fi
     
-    echo -e "${YELLOW}检测到操作系统: ${OS} ${VERSION}${NC}"
+    echo -e "${YELLOW}Detected OS: ${OS} ${VERSION}${NC}"
 }
 
-# Ubuntu/Debian系统安装
+# Ubuntu/Debian system installation
 install_ubuntu_deps() {
-    echo -e "${YELLOW}📦 安装Ubuntu/Debian依赖...${NC}"
+    echo -e "${YELLOW}📦 Installing Ubuntu/Debian dependencies...${NC}"
     
-    # 更新包列表
-    echo "更新包列表..."
+    # Update package list
+    echo "Updating package list..."
     sudo apt-get update -q
     
-    # 安装基本依赖
-    echo "安装基本开发工具..."
+    # Install basic dependencies
+    echo "Installing basic development tools..."
     sudo apt-get install -y \
         wget \
         curl \
@@ -74,25 +74,25 @@ install_ubuntu_deps() {
         libbamtools-dev \
         git
     
-    echo -e "${GREEN}✓ Ubuntu/Debian依赖安装完成${NC}"
+    echo -e "${GREEN}✓ Ubuntu/Debian dependencies installed${NC}"
 }
 
-# CentOS/RHEL/Fedora系统安装
+# CentOS/RHEL/Fedora system installation
 install_redhat_deps() {
-    echo -e "${YELLOW}📦 安装CentOS/RHEL/Fedora依赖...${NC}"
+    echo -e "${YELLOW}📦 Installing CentOS/RHEL/Fedora dependencies...${NC}"
     
-    # 检测包管理器
+    # Detect package manager
     if command -v dnf &> /dev/null; then
         PKG_MGR="dnf"
     elif command -v yum &> /dev/null; then
         PKG_MGR="yum"
     else
-        echo -e "${RED}❌ 未找到包管理器 (yum/dnf)${NC}"
+        echo -e "${RED}❌ Package manager not found (yum/dnf)${NC}"
         exit 1
     fi
     
-    # 安装基本依赖
-    echo "安装基本开发工具..."
+    # Install basic dependencies
+    echo "Installing basic development tools..."
     sudo $PKG_MGR groupinstall -y "Development Tools"
     sudo $PKG_MGR install -y \
         wget \
@@ -121,21 +121,21 @@ install_redhat_deps() {
         bamtools-devel \
         git
     
-    echo -e "${GREEN}✓ CentOS/RHEL/Fedora依赖安装完成${NC}"
+    echo -e "${GREEN}✓ CentOS/RHEL/Fedora dependencies installed${NC}"
 }
 
-# macOS系统安装
+# macOS system installation
 install_macos_deps() {
-    echo -e "${YELLOW}📦 安装macOS依赖...${NC}"
+    echo -e "${YELLOW}📦 Installing macOS dependencies...${NC}"
     
-    # 检查是否安装了Homebrew
+    # Check if Homebrew is installed
     if ! command -v brew &> /dev/null; then
-        echo "安装Homebrew..."
+        echo "Installing Homebrew..."
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     fi
     
-    # 安装基本依赖
-    echo "安装基本开发工具..."
+    # Install basic dependencies
+    echo "Installing basic development tools..."
     brew install \
         wget \
         curl \
@@ -155,17 +155,17 @@ install_macos_deps() {
         libffi \
         git
     
-    echo -e "${GREEN}✓ macOS依赖安装完成${NC}"
+    echo -e "${GREEN}✓ macOS dependencies installed${NC}"
 }
 
-# 验证安装
+# Verify installation
 verify_installation() {
-    echo -e "${YELLOW}✅ 验证系统依赖安装...${NC}"
+    echo -e "${YELLOW}✅ Verifying system dependencies installation...${NC}"
     
     local missing=()
     
-    # 检查基本命令
-    for cmd in wget curl tar make gcc g++ perl python3 java; do
+    # Check basic commands
+    for cmd in wget curl tar make gcc g++ perl python3 java uv; do
         if ! command -v "$cmd" &> /dev/null; then
             missing+=("$cmd")
         else
@@ -173,11 +173,11 @@ verify_installation() {
         fi
     done
     
-    # 检查Python包管理器
-    if command -v pip3 &> /dev/null; then
-        echo -e "${GREEN}  ✓ pip3${NC}"
+    # Check if virtual environment exists
+    if [ -d ".venv" ]; then
+        echo -e "${GREEN}  ✓ Python virtual environment (.venv)${NC}"
     else
-        missing+=("pip3")
+        echo -e "${YELLOW}  ⚠ Virtual environment not found${NC}"
     fi
     
     # 检查Java版本
@@ -194,34 +194,62 @@ verify_installation() {
     fi
     
     if [ ${#missing[@]} -eq 0 ]; then
-        echo -e "${GREEN}🎉 所有系统依赖验证成功！${NC}"
+        echo -e "${GREEN}🎉 All system dependencies verified successfully!${NC}"
         return 0
     else
-        echo -e "${RED}❌ 缺少依赖: ${missing[*]}${NC}"
+        echo -e "${RED}❌ Missing dependencies: ${missing[*]}${NC}"
         return 1
     fi
 }
 
-# 安装Python依赖
-install_python_deps() {
-    echo -e "${YELLOW}🐍 安装Python依赖...${NC}"
+# Install uv and setup Python environment
+install_uv_and_python_env() {
+    echo -e "${YELLOW}🐍 Installing uv and setting up Python environment...${NC}"
     
-    # 升级pip
-    echo "升级pip..."
-    python3 -m pip install --upgrade pip
+    # Check if uv is already installed
+    if command -v uv &> /dev/null; then
+        echo "uv is already installed"
+        uv --version
+    else
+        echo "Installing uv..."
+        curl -LsSf https://astral.sh/uv/install.sh | sh
+        export PATH="$HOME/.cargo/bin:$PATH"
+    fi
     
-    # 安装常用的生物信息学Python包
-    echo "安装Python生物信息学包..."
-    pip3 install --user \
-        biopython \
-        pandas \
-        numpy \
-        matplotlib \
-        seaborn \
-        pyyaml \
-        requests
+    # Check if we're in a project directory with pyproject.toml
+    if [ -f "pyproject.toml" ]; then
+        echo "Creating virtual environment and installing dependencies with uv..."
+        uv venv .venv
+        echo "Virtual environment created at .venv"
+        
+        echo "Installing project dependencies..."
+        uv pip install -e .
+        
+        echo "Installing additional bioinformatics tools..."
+        uv pip install \
+            gffutils \
+            intervaltree \
+            psutil
+    else
+        echo "No pyproject.toml found. Creating basic Python environment..."
+        uv venv .venv
+        echo "Virtual environment created at .venv"
+        
+        echo "Installing basic dependencies..."
+        uv pip install \
+            biopython \
+            pandas \
+            numpy \
+            matplotlib \
+            seaborn \
+            pyyaml \
+            requests \
+            gffutils \
+            intervaltree \
+            psutil
+    fi
     
-    echo -e "${GREEN}✓ Python依赖安装完成${NC}"
+    echo -e "${GREEN}✓ Python environment setup with uv completed${NC}"
 }
 
 # 主函数
@@ -239,8 +267,8 @@ main() {
             install_macos_deps
             ;;
         *)
-            echo -e "${YELLOW}⚠️  未识别的操作系统: $OS${NC}"
-            echo -e "${YELLOW}请手动安装以下依赖:${NC}"
+            echo -e "${YELLOW}⚠️  Unrecognized operating system: $OS${NC}"
+            echo -e "${YELLOW}Please manually install the following dependencies:${NC}"
             echo "  - wget/curl"
             echo "  - tar, bzip2"
             echo "  - gcc, g++, make, cmake"
@@ -250,30 +278,31 @@ main() {
             ;;
     esac
     
-    # 安装Python依赖
-    install_python_deps
+    # Install uv and Python environment
+    install_uv_and_python_env
     
     # 验证安装
     if verify_installation; then
         echo ""
-        echo -e "${GREEN}🎉 系统依赖安装完成！${NC}"
+        echo -e "${GREEN}🎉 System dependencies installation completed!${NC}"
         echo ""
-        echo -e "${BLUE}下一步操作：${NC}"
-        echo "1. 运行第三方软件安装: ./setup_tools.sh"
-        echo "2. 加载环境配置: source setup_env.sh"
-        echo "3. 验证工具安装: ./verify_tools.sh"
+        echo -e "${BLUE}Next steps:${NC}"
+        echo "1. Activate Python environment: source .venv/bin/activate"
+        echo "2. Install bioinformatics tools: ./setup_tools.sh"
+        echo "3. Load environment configuration: source setup_env.sh"
+        echo "4. Verify tools installation: ./verify_tools.sh"
     else
         echo ""
-        echo -e "${RED}❌ 系统依赖安装不完整，请检查错误信息${NC}"
+        echo -e "${RED}❌ System dependencies installation incomplete, please check error messages${NC}"
         exit 1
     fi
 }
 
 # 检查是否有root权限
 if [ "$EUID" -eq 0 ]; then
-    echo -e "${YELLOW}⚠️  以root权限运行${NC}"
+    echo -e "${YELLOW}⚠️  Running as root${NC}"
 else
-    echo -e "${YELLOW}ℹ️  需要sudo权限来安装系统包${NC}"
+    echo -e "${YELLOW}ℹ️  Sudo privileges required for system package installation${NC}"
 fi
 
 # 执行主函数
