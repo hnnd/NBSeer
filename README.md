@@ -95,9 +95,9 @@ results/
 
 | Genome Size | Processing Time | Memory Usage | Predicted Genes |
 |-------------|-----------------|--------------|-----------------|
-| 100 Mb | ~2 hours | ~8 GB | ~200-500 |
-| 500 Mb | ~8 hours | ~24 GB | ~500-1000 |
-| 3 Gb | ~24 hours | ~64 GB | ~500-1000 |
+| 100 Mb | ~0.5 hours | ~8 GB | ~200-500 |
+| 500 Mb | ~1 hours | ~24 GB | ~500-1000 |
+| 3 Gb | ~4 hours | ~64 GB | ~500-1000 |
 
 ## 🤝 Community
 
@@ -119,7 +119,7 @@ If you use NBSeer in your research, please cite:
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License.
 
 ---
 
