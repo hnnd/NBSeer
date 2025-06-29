@@ -47,7 +47,7 @@ echo ""
 echo "🚀 示例1: 运行完整流水线带Augustus训练"
 echo "----------------------------------------"
 
-python -m nbs_annotation.main \
+python -m nbseer.main \
     --genome "$GENOME_FILE" \
     --proteins "$PROTEIN_FILE" \
     --output "$OUTPUT_DIR/full_pipeline" \
@@ -70,14 +70,14 @@ echo "------------------------"
 STAGE_OUTPUT="$OUTPUT_DIR/staged_pipeline"
 
 echo "  阶段1: NLR基因定位"
-python -m nbs_annotation.main \
+python -m nbseer.main \
     --genome "$GENOME_FILE" \
     --stage nlr_localization \
     --output "$STAGE_OUTPUT" \
     --verbose
 
 echo "  阶段2: 蛋白质比对"
-python -m nbs_annotation.main \
+python -m nbseer.main \
     --genome "$GENOME_FILE" \
     --proteins "$PROTEIN_FILE" \
     --stage protein_alignment \
@@ -85,7 +85,7 @@ python -m nbs_annotation.main \
     --verbose
 
 echo "  阶段3: Augustus训练"
-python -m nbs_annotation.main \
+python -m nbseer.main \
     --genome "$GENOME_FILE" \
     --proteins "$PROTEIN_FILE" \
     --stage augustus_training \
@@ -97,7 +97,7 @@ python -m nbs_annotation.main \
     --verbose
 
 echo "  阶段4: 基因预测（使用训练的模型）"
-python -m nbs_annotation.main \
+python -m nbseer.main \
     --genome "$GENOME_FILE" \
     --stage gene_prediction \
     --output "$STAGE_OUTPUT" \
@@ -106,7 +106,7 @@ python -m nbs_annotation.main \
     --verbose
 
 echo "  阶段5: 证据整合"
-python -m nbs_annotation.main \
+python -m nbseer.main \
     --genome "$GENOME_FILE" \
     --stage evidence_integration \
     --output "$STAGE_OUTPUT" \
@@ -119,7 +119,7 @@ echo ""
 echo "⚡ 示例3: 快速测试模式"
 echo "--------------------"
 
-python -m nbs_annotation.main \
+python -m nbseer.main \
     --genome "$GENOME_FILE" \
     --proteins "$PROTEIN_FILE" \
     --output "$OUTPUT_DIR/quick_test" \
@@ -141,7 +141,7 @@ echo "-----------------------------"
 
 for quality in high medium low; do
     echo "  训练质量级别: $quality"
-    python -m nbs_annotation.main \
+    python -m nbseer.main \
         --genome "$GENOME_FILE" \
         --proteins "$PROTEIN_FILE" \
         --stage augustus_training \

@@ -33,8 +33,8 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 from utils.logging_setup import setup_logging
 from utils.config import get_config
-from nbs_annotation.augustus_trainer import AugustusAutoTrainer, AutoTrainingConfig, AutoTrainingResult
-from nbs_annotation.miniprot_result_processor import MiniprotResultProcessor
+from nbseer.augustus_trainer import AugustusAutoTrainer, AutoTrainingConfig, AutoTrainingResult
+from nbseer.miniprot_result_processor import MiniprotResultProcessor
 
 
 @dataclass

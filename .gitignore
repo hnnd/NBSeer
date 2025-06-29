@@ -127,6 +127,7 @@ uv.lock
 
 # Source code
 !src/
+!src/nbseer/data/
 !examples/
 
 # Tool setup scripts and configurations (but not binaries)

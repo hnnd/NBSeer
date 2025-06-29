@@ -42,7 +42,7 @@ classifiers = [
 "Documentation" = "https://nbs-gene-annotation.readthedocs.io/"
 
 [project.scripts]
-nbs-annotate = "nbs_annotation.main:main"
+nbs-annotate = "nbseer.main:main"
 
 [build-system]
 requires = ["hatchling"]

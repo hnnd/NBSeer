@@ -23,7 +23,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 from utils.logging_setup import setup_logging
 from utils.config import get_config
-from nbs_annotation.augustus_miniprot_trainer import (
+from nbseer.augustus_miniprot_trainer import (
     AugustusMiniprotTrainer, 
     MiniprotTrainingConfig,
     MiniprotTrainingResult

@@ -80,10 +80,10 @@ verify_directory_structure() {
     
     local dirs=(
         "tools/bin"
-        "tools/Augustus"
+        "tools/augustus"
         "tools/miniprot" 
-        "tools/EVidenceModeler"
-        "tools/NLR-Annotator"
+        "tools/evidencemodeler"
+        "tools/nlr-annotator"
     )
     
     for dir in "${dirs[@]}"; do
@@ -102,10 +102,10 @@ verify_symlinks() {
     local links=(
         "tools/bin/augustus"
         "tools/bin/miniprot"
-        "tools/Augustus/bin"
-        "tools/Augustus/config"
-        "tools/Augustus/scripts"
-        "tools/miniprot/miniprot"
+        "tools/augustus/bin"
+        "tools/augustus/config"
+        "tools/augustus/scripts"
+        "tools/miniprot/bin/miniprot"
     )
     
     for link in "${links[@]}"; do
@@ -136,15 +136,15 @@ main() {
     verify_tool "miniprot" "${TOOLS_DIR}/bin/miniprot" "miniprot --version" ""
     echo ""
     
-    verify_java_tool "NLR-Annotator" "${TOOLS_DIR}/NLR-Annotator/NLR-Annotator-v2.1b.jar"
+    verify_java_tool "NLR-Annotator" "${TOOLS_DIR}/nlr-annotator/NLR-Annotator-v2.1b.jar"
     echo ""
     
     # 验证EVM脚本
     echo -e "${YELLOW}检查 EVidenceModeler...${NC}"
     local evm_scripts=(
-        "tools/EVidenceModeler/EvmUtils/partition_EVM_inputs.pl"
-        "tools/EVidenceModeler/EvmUtils/convert_EVM_outputs_to_GFF3.pl"
-        "tools/EVidenceModeler/EvmUtils/execute_EVM_commands.pl"
+        "tools/evidencemodeler/EvmUtils/partition_EVM_inputs.pl"
+        "tools/evidencemodeler/EvmUtils/convert_EVM_outputs_to_GFF3.pl"
+        "tools/evidencemodeler/EvmUtils/execute_EVM_commands.pl"
     )
     
     for script in "${evm_scripts[@]}"; do
@@ -182,10 +182,10 @@ main() {
     echo "🔧 工具目录结构:"
     echo "   tools/"
     echo "   ├── bin/              # 统一可执行文件入口"
-    echo "   ├── Augustus/         # Augustus基因预测工具"
+    echo "   ├── augustus/         # Augustus基因预测工具"
     echo "   ├── miniprot/         # miniprot蛋白质比对工具"
-    echo "   ├── EVidenceModeler/  # EVM证据整合工具"
-    echo "   └── NLR-Annotator/    # NLR基因识别工具"
+    echo "   ├── evidencemodeler/  # EVM证据整合工具"
+    echo "   └── nlr-annotator/    # NLR基因识别工具"
     echo ""
     echo "🌍 使用方法:"
     echo "   source setup_env.sh   # 加载环境配置"

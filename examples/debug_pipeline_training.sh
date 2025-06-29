@@ -39,12 +39,12 @@ echo ""
 
 # Test 1: Check command line help
 echo "🧪 Test 1: Checking command line help..."
-python -m nbs_annotation.main --help | grep -A 5 "Augustus Training" || echo "Augustus Training options not found"
+python -m nbseer.main --help | grep -A 5 "Augustus Training" || echo "Augustus Training options not found"
 echo ""
 
 # Test 2: Dry run test
 echo "🧪 Test 2: Dry run test..."
-python -m nbs_annotation.main \
+python -m nbseer.main \
     --genome genome/osa.fa \
     --proteins db/AllResistanceGenes.fasta \
     --enable-training \
@@ -59,7 +59,7 @@ echo ""
 
 # Test 3: Validate input files
 echo "🧪 Test 3: Validating input files..."
-python -m nbs_annotation.main \
+python -m nbseer.main \
     --genome genome/osa.fa \
     --proteins db/AllResistanceGenes.fasta \
     --validate-only
@@ -68,7 +68,7 @@ echo ""
 
 # Test 4: Check tool availability
 echo "🧪 Test 4: Checking tool availability..."
-python -m nbs_annotation.main \
+python -m nbseer.main \
     --check-tools
 
 echo ""
@@ -78,7 +78,7 @@ echo "🧪 Test 5: Running NLR localization stage..."
 OUTPUT_DIR="results/debug_test"
 mkdir -p "$OUTPUT_DIR"
 
-python -m nbs_annotation.main \
+python -m nbseer.main \
     --genome genome/osa.fa \
     --stage nlr_localization \
     --output "$OUTPUT_DIR" \
@@ -90,7 +90,7 @@ echo ""
 
 # Test 6: Run protein alignment stage
 echo "🧪 Test 6: Running protein alignment stage..."
-python -m nbs_annotation.main \
+python -m nbseer.main \
     --genome genome/osa.fa \
     --proteins db/AllResistanceGenes.fasta \
     --stage protein_alignment \
@@ -123,7 +123,7 @@ echo ""
 # Test 8: Try running Augustus training (if training data is available)
 if [[ -f "$OUTPUT_DIR/protein_alignment/filtered/miniprot_high_quality.gff3" ]]; then
     echo "🧪 Test 8: Running Augustus training stage..."
-    python -m nbs_annotation.main \
+    python -m nbseer.main \
         --genome genome/osa.fa \
         --proteins db/AllResistanceGenes.fasta \
         --stage augustus_training \

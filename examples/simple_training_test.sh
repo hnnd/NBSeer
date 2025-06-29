@@ -17,12 +17,12 @@ echo ""
 
 # Test 1: Check basic functionality
 echo "🔍 Test 1: Checking basic functionality..."
-python -m nbs_annotation.main --help | head -5
+python -m nbseer.main --help | head -5
 echo ""
 
 # Test 2: Dry run with training
 echo "🔍 Test 2: Dry run test with training options..."
-python -m nbs_annotation.main \
+python -m nbseer.main \
     --genome genome/osa.fa \
     --proteins db/AllResistanceGenes.fasta \
     --enable-training \
@@ -36,7 +36,7 @@ echo ""
 
 # Test 3: Check tool availability
 echo "🔍 Test 3: Checking tool availability..."
-python -m nbs_annotation.main --check-tools
+python -m nbseer.main --check-tools
 echo ""
 
 # Test 4: Validate training settings in config file
@@ -47,7 +47,7 @@ echo ""
 
 # Test 5: Try using training CLI directly
 echo "🔍 Test 5: Testing standalone training CLI..."
-python src/nbs_annotation/train_augustus_cli.py --help | head -10
+python src/nbseer/train_augustus_cli.py --help | head -10
 echo ""
 
 # Test 6: Check if existing Miniprot results exist
@@ -59,7 +59,7 @@ if [[ -f "data/test/test_output/protein_alignment/filtered/miniprot_high_quality
     
     echo ""
     echo "🧪 Testing Augustus training (using existing data)..."
-    python src/nbs_annotation/train_augustus_cli.py \
+    python src/nbseer/train_augustus_cli.py \
         --species simple_test_model_cli \
         --genome genome/osa.fa \
         --miniprot-file data/test/test_output/protein_alignment/filtered/miniprot_high_quality.gff3 \

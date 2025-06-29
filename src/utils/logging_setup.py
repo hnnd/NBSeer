@@ -17,7 +17,7 @@ from typing import Optional, Dict, Any
 class NBSLogger:
     """NBS基因注释项目专用日志器"""
     
-    def __init__(self, name: str = "nbs_annotation"):
+    def __init__(self, name: str = "nbseer"):
         self.name = name
         self.logger = logging.getLogger(name)
         self._configured = False
@@ -120,7 +120,7 @@ class NBSLogger:
         handlers = []
         
         # 通用日志文件（所有级别）
-        general_log = log_dir / "nbs_annotation.log"
+        general_log = log_dir / "nbseer.log"
         general_handler = logging.handlers.RotatingFileHandler(
             general_log, maxBytes=max_file_size, backupCount=backup_count
         )
@@ -129,7 +129,7 @@ class NBSLogger:
         handlers.append(general_handler)
         
         # 错误日志文件（只记录WARNING及以上）
-        error_log = log_dir / "nbs_annotation_error.log"
+        error_log = log_dir / "nbseer_error.log"
         error_handler = logging.handlers.RotatingFileHandler(
             error_log, maxBytes=max_file_size, backupCount=backup_count
         )
@@ -139,7 +139,7 @@ class NBSLogger:
         
         # 调试日志文件（只在DEBUG级别时创建）
         if self.logger.level <= logging.DEBUG:
-            debug_log = log_dir / "nbs_annotation_debug.log"
+            debug_log = log_dir / "nbseer_debug.log"
             debug_handler = logging.handlers.RotatingFileHandler(
                 debug_log, maxBytes=max_file_size, backupCount=backup_count
             )
@@ -183,7 +183,7 @@ def setup_logging(
     global _global_logger
     
     if _global_logger is None:
-        _global_logger = NBSLogger("nbs_annotation")
+        _global_logger = NBSLogger("nbseer")
     
     return _global_logger.setup_logging(
         log_level=log_level,
@@ -207,7 +207,7 @@ def get_logger(name: Optional[str] = None) -> logging.Logger:
     if name is None:
         global _global_logger
         if _global_logger is None:
-            _global_logger = NBSLogger("nbs_annotation")
+            _global_logger = NBSLogger("nbseer")
             _global_logger.setup_logging()
         return _global_logger.get_logger()
     else:

@@ -19,8 +19,8 @@ import json
 project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 
-from src.nbs_annotation.gene_id_renamer import GeneIDRenamer
-from src.nbs_annotation.species_config import GeneNamingConfig
+from src.nbseer.gene_id_renamer import GeneIDRenamer
+from src.nbseer.species_config import GeneNamingConfig
 
 
 class PostEVMRenamer:

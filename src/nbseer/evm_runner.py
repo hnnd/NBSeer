@@ -24,7 +24,7 @@ project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 
 from src.utils.config import ConfigManager
-from src.nbs_annotation.memory_manager import GenomeMemoryManager, PartitioningConfig
+from src.nbseer.memory_manager import GenomeMemoryManager, PartitioningConfig
 
 
 @dataclass
