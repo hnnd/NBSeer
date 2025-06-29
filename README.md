@@ -69,22 +69,6 @@ results/
 └── renamed_annotations.gff3    # Renamed annotations
 ```
 
-## 📚 Documentation
-
-| Document | Description | Audience |
-|----------|-------------|----------|
-| **[📋 Complete Documentation](./NBS_ANNOTATION_PIPELINE_DOCUMENTATION.md)** | Complete technical documentation | Developers & Advanced Users |
-| **[📖 Project Overview](./PROJECT_OVERVIEW.md)** | Documentation navigation & overview | All Users |
-| **[⚙️ Installation Guide](./INSTALLATION_GUIDE.md)** | Detailed installation guide | System Administrators |
-| **[🔧 Configuration Guide](./CONFIG_UPDATE_GUIDE.md)** | Configuration & customization | Advanced Users |
-
-### Quick Navigation
-
-- 🆕 **New Users**: Start with this README → [Installation Guide](./INSTALLATION_GUIDE.md)
-- 🔧 **System Admins**: [Installation Guide](./INSTALLATION_GUIDE.md) → [Tools Setup](./TOOLS_SETUP_GUIDE.md)
-- 👨‍💻 **Developers**: [Complete Documentation](./NBS_ANNOTATION_PIPELINE_DOCUMENTATION.md) → Source Code (`src/`)
-- 🧬 **Bioinformaticians**: [Augustus Training Guide](./docs/augustus_training_guide.md) → [Gene ID Renaming](./docs/gene_id_renaming_guide.md)
-
 ## 🛠️ System Requirements
 
 ### Hardware
@@ -112,72 +96,10 @@ results/
 | Genome Size | Processing Time | Memory Usage | Predicted Genes |
 |-------------|-----------------|--------------|-----------------|
 | 100 Mb | ~2 hours | ~8 GB | ~200-500 |
-| 500 Mb | ~8 hours | ~24 GB | ~1000-2000 |
-| 3 Gb | ~24 hours | ~64 GB | ~5000-10000 |
+| 500 Mb | ~8 hours | ~24 GB | ~500-1000 |
+| 3 Gb | ~24 hours | ~64 GB | ~500-1000 |
 
-## 🧪 Example Workflows
-
-### Workflow 1: Complete Pipeline
-```bash
-# Step 1: Run annotation pipeline
-python -m src.nbseer.main \
-    --genome rice_genome.fa \
-    --proteins rice_proteins.fa \
-    --output rice_results/ \
-    --threads 24
-
-# Step 2: Rename genes with species prefix
-python -m src.nbseer.post_evm_renamer \
-    --input rice_results/final_annotations.gff3 \
-    --output rice_results/rice_nbs_genes.gff3 \
-    --species rice_nipponbare
-
-# Step 3: Generate summary report
-python -c "
-import json
-with open('rice_results/pipeline_results.json') as f:
-    stats = json.load(f)
-    print(f'Total genes predicted: {stats[\"total_genes\"]}')
-    print(f'Average gene length: {stats[\"average_gene_length\"]:.1f} bp')
-"
-```
-
-### Workflow 2: Custom Training
-```bash
-# Train Augustus model for your species
-python -m src.nbseer.train_augustus_cli \
-    --genome your_genome.fa \
-    --proteins your_proteins.fa \
-    --species-name your_species \
-    --training-type miniprot \
-    --output training_results/
-
-# Use custom model for annotation
-python -m src.nbseer.main \
-    --genome your_genome.fa \
-    --proteins your_proteins.fa \
-    --augustus-species your_species \
-    --output results/
-```
-
-### Workflow 3: Quality Control Focus
-```bash
-# High-stringency annotation
-python -m src.nbseer.main \
-    --genome genome.fa \
-    --proteins proteins.fa \
-    --quality-filter strict \
-    --min-identity 0.98 \
-    --min-gene-length 500 \
-    --output high_quality_results/
-```
-
-## 🤝 Support & Contribution
-
-### Getting Help
-- 📖 **Documentation**: [Complete Documentation](./NBS_ANNOTATION_PIPELINE_DOCUMENTATION.md)
-- 🐛 **Issues**: [GitHub Issues](https://github.com/hnnd/nbseer/issues)
-- 💬 **Discussions**: [GitHub Discussions](https://github.com/hnnd/nbseer/discussions)
+## 🤝 Community
 
 ### Contributing
 We welcome contributions! Please see our [Contributing Guidelines](./CONTRIBUTING.md) for details.
@@ -201,13 +123,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**🔗 Quick Links**:
-[📋 Complete Docs](./NBS_ANNOTATION_PIPELINE_DOCUMENTATION.md) | 
-[📖 Project Overview](./PROJECT_OVERVIEW.md) | 
-[⚙️ Installation](./INSTALLATION_GUIDE.md) | 
-[🔧 Configuration](./CONFIG_UPDATE_GUIDE.md) | 
-[🧬 Augustus Training](./docs/augustus_training_guide.md)
-
----
-
-**Version**: 0.1.0 | **Updated**: 2025-06-29 | **Team**: NBSeer Development Team
+**Version**: 0.1.0 | **Updated**: 2025-06-29 
