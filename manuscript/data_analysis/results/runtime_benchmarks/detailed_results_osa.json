@@ -1,0 +1,41 @@
+[
+  {
+    "dataset": "osa",
+    "run_index": 0,
+    "runtime_seconds": 4477.6463396549225,
+    "runtime_minutes": 74.6274389942487,
+    "runtime_hours": 1.2437906499041451,
+    "success": true,
+    "max_memory_mb": 601.41796875,
+    "avg_cpu_percent": 0.5945027932960895,
+    "num_threads": 8,
+    "genome_size_mb": 364.2622709274292,
+    "timestamp": "2025-06-28T09:50:07.883700"
+  },
+  {
+    "dataset": "osa",
+    "run_index": 1,
+    "runtime_seconds": 4748.845494747162,
+    "runtime_minutes": 79.14742491245269,
+    "runtime_hours": 1.3191237485408782,
+    "success": true,
+    "max_memory_mb": 542.41796875,
+    "avg_cpu_percent": 0.6471133586177836,
+    "num_threads": 8,
+    "genome_size_mb": 364.2622709274292,
+    "timestamp": "2025-06-28T11:09:16.885512"
+  },
+  {
+    "dataset": "osa",
+    "run_index": 2,
+    "runtime_seconds": 6004.32174372673,
+    "runtime_minutes": 100.07202906211218,
+    "runtime_hours": 1.6678671510352028,
+    "success": true,
+    "max_memory_mb": 608.54296875,
+    "avg_cpu_percent": 0.49146808865189145,
+    "num_threads": 8,
+    "genome_size_mb": 364.2622709274292,
+    "timestamp": "2025-06-28T12:49:21.361291"
+  }
+]

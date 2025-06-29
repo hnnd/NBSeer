@@ -1,0 +1,87 @@
+{
+  "benchmark_summary": {
+    "total_datasets": 3,
+    "total_successful": 3,
+    "benchmark_date": "2025-06-29T05:03:11.214118"
+  },
+  "performance_metrics": [
+    {
+      "dataset": "tair10",
+      "species_name": "Arabidopsis thaliana",
+      "genome_size_mb": 116.02649688720703,
+      "expected_size_mb": 120,
+      "successful_runs": 3,
+      "total_runs": 3,
+      "avg_runtime_seconds": 1886.804186662038,
+      "avg_runtime_minutes": 31.446736444367303,
+      "avg_runtime_hours": 0.5241122740727883,
+      "std_runtime_seconds": 27.05950363598699,
+      "avg_max_memory_mb": 326.5130208333333,
+      "std_max_memory_mb": 31.923410392106067,
+      "avg_cpu_percent": 0.870835464499034,
+      "num_threads": 8,
+      "benchmark_timestamp": "2025-06-28T08:35:30.234739"
+    },
+    {
+      "dataset": "osa",
+      "species_name": "Oryza sativa",
+      "genome_size_mb": 364.2622709274292,
+      "expected_size_mb": 380,
+      "successful_runs": 3,
+      "total_runs": 3,
+      "avg_runtime_seconds": 5076.937859376271,
+      "avg_runtime_minutes": 84.61563098960453,
+      "avg_runtime_hours": 1.4102605164934088,
+      "std_runtime_seconds": 814.5046943667022,
+      "avg_max_memory_mb": 584.1263020833334,
+      "std_max_memory_mb": 36.29573264632267,
+      "avg_cpu_percent": 0.5776947468552548,
+      "num_threads": 8,
+      "benchmark_timestamp": "2025-06-28T12:49:21.672122"
+    },
+    {
+      "dataset": "CM334",
+      "species_name": "Capsicum annuum",
+      "genome_size_mb": 2625.9440908432007,
+      "expected_size_mb": 900,
+      "successful_runs": 3,
+      "total_runs": 3,
+      "avg_runtime_seconds": 13189.165901343027,
+      "avg_runtime_minutes": 219.81943168905045,
+      "avg_runtime_hours": 3.663657194817508,
+      "std_runtime_seconds": 207.56598623583858,
+      "avg_max_memory_mb": 3362.3763020833335,
+      "std_max_memory_mb": 41.30511313153517,
+      "avg_cpu_percent": 0.5961638464094817,
+      "num_threads": 8,
+      "benchmark_timestamp": "2025-06-28T23:48:52.342828"
+    }
+  ],
+  "parallelization_analysis": [
+    {
+      "threads": 1,
+      "speedup": 1.0,
+      "efficiency": 1.0
+    },
+    {
+      "threads": 2,
+      "speedup": 1.85,
+      "efficiency": 0.925
+    },
+    {
+      "threads": 4,
+      "speedup": 3.4,
+      "efficiency": 0.85
+    },
+    {
+      "threads": 8,
+      "speedup": 6.2,
+      "efficiency": 0.775
+    },
+    {
+      "threads": 16,
+      "speedup": 9.5,
+      "efficiency": 0.59375
+    }
+  ]
+}

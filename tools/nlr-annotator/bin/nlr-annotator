@@ -1,0 +1,4 @@
+#!/bin/bash
+# NLR-Annotator wrapper script
+NLR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/.."
+java -jar "${NLR_DIR}/NLR-Annotator-v2.1b.jar" "$@"

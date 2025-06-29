@@ -10,16 +10,11 @@
 *.fai
 *.fa.fai
 
-# Large tool installations
-tools/augustus/
-tools/evidencemodeler/
-tools/miniprot/
-tools/nlr-annotator/
-tools/*/bin/
-tools/*/lib/
-tools/*/share/
-
-
+CLAUDE.md
+.claude/
+docs/
+examples/
+evm_config/
 
 # Sequence databases
 *.db
@@ -37,13 +32,6 @@ manuscript/data/
 results_*/
 renamed_output/
 
-# Analysis outputs
-manuscript/data_analysis/results/
-manuscript/data_analysis/nohup.out
-manuscript/figures/processed/
-manuscript/figures/raw/
-manuscript/tables/formatted/
-manuscript/tables/raw_data/
 
 # Log files
 *.log

@@ -1,0 +1,41 @@
+[
+  {
+    "dataset": "CM334",
+    "run_index": 0,
+    "runtime_seconds": 12968.713807582855,
+    "runtime_minutes": 216.1452301263809,
+    "runtime_hours": 3.6024205021063485,
+    "success": true,
+    "max_memory_mb": 3368.7421875,
+    "avg_cpu_percent": 0.6262402592392556,
+    "num_threads": 8,
+    "genome_size_mb": 2625.9440908432007,
+    "timestamp": "2025-06-28T16:25:30.388059"
+  },
+  {
+    "dataset": "CM334",
+    "run_index": 1,
+    "runtime_seconds": 13217.940770149231,
+    "runtime_minutes": 220.29901283582052,
+    "runtime_hours": 3.671650213930342,
+    "success": true,
+    "max_memory_mb": 3318.2578125,
+    "avg_cpu_percent": 0.5702369237756412,
+    "num_threads": 8,
+    "genome_size_mb": 2625.9440908432007,
+    "timestamp": "2025-06-28T20:05:49.576996"
+  },
+  {
+    "dataset": "CM334",
+    "run_index": 2,
+    "runtime_seconds": 13380.843126296997,
+    "runtime_minutes": 223.01405210494994,
+    "runtime_hours": 3.7169008684158324,
+    "success": true,
+    "max_memory_mb": 3400.12890625,
+    "avg_cpu_percent": 0.5920143562135485,
+    "num_threads": 8,
+    "genome_size_mb": 2625.9440908432007,
+    "timestamp": "2025-06-28T23:48:51.482396"
+  }
+]

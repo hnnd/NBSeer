@@ -1,0 +1,41 @@
+[
+  {
+    "dataset": "tair10",
+    "run_index": 0,
+    "runtime_seconds": 1914.1808664798737,
+    "runtime_minutes": 31.903014441331226,
+    "runtime_hours": 0.5317169073555205,
+    "success": true,
+    "max_memory_mb": 308.08203125,
+    "avg_cpu_percent": 0.8406691061160482,
+    "num_threads": 8,
+    "genome_size_mb": 116.02649688720703,
+    "timestamp": "2025-06-28T07:33:03.774621"
+  },
+  {
+    "dataset": "tair10",
+    "run_index": 1,
+    "runtime_seconds": 1860.0734241008759,
+    "runtime_minutes": 31.001223735014598,
+    "runtime_hours": 0.5166870622502433,
+    "success": true,
+    "max_memory_mb": 363.375,
+    "avg_cpu_percent": 0.8735879505110276,
+    "num_threads": 8,
+    "genome_size_mb": 116.02649688720703,
+    "timestamp": "2025-06-28T08:04:03.920042"
+  },
+  {
+    "dataset": "tair10",
+    "run_index": 2,
+    "runtime_seconds": 1886.158269405365,
+    "runtime_minutes": 31.435971156756082,
+    "runtime_hours": 0.5239328526126014,
+    "success": true,
+    "max_memory_mb": 308.08203125,
+    "avg_cpu_percent": 0.8982493368700266,
+    "num_threads": 8,
+    "genome_size_mb": 116.02649688720703,
+    "timestamp": "2025-06-28T08:35:30.152399"
+  }
+]
