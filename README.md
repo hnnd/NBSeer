@@ -53,7 +53,7 @@ python -m src.nbseer.main --check-tools
 # Run full pipeline
 python -m src.nbseer.main \
     --genome genome.fa \
-    --proteins proteins.fa \
+    --proteins data/prgdb/prg_nbs.fasta \
     --output results/ \
     --threads 16
 

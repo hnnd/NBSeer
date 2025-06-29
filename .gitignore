@@ -22,7 +22,9 @@ evm_config/
 *.gff.db
 
 # Large data directories
-data/
+./data/input/
+./data/output/
+./data/interim/
 genome/
 manuscript/data/
 
@@ -129,6 +131,9 @@ uv.lock
 !src/
 !src/nbseer/data/
 !examples/
+
+# Data
+!data/prgdb/
 
 # Tool setup scripts and configurations (but not binaries)
 !tools/setup_*.sh
