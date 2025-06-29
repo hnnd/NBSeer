@@ -10,13 +10,14 @@
 *.fai
 *.fa.fai
 
-# Claude data
-CLAUDE.md
-pyproject.toml
-.claude/
-docs/
-examples/
-evm_config/
+# Large tool installations
+tools/augustus/
+tools/evidencemodeler/
+tools/miniprot/
+tools/nlr-annotator/
+tools/*/bin/
+tools/*/lib/
+tools/*/share/
 
 
 
@@ -156,6 +157,15 @@ uv.lock
 !src/
 !examples/
 
+# Tool setup scripts and configurations (but not binaries)
+!tools/setup_*.sh
+!tools/install_*.sh
+!tools/verify_*.sh
+!tools/*.md
+!tools/*.txt
+!tools/*.yaml
+!tools/*.json
+
 # Setup scripts
 !setup_*.sh
 !install_*.sh
@@ -174,6 +184,8 @@ uv.lock
 !manuscript/data_analysis/statistical_analysis/
 !manuscript/data_analysis/accuracy_assessment/*.py
 !manuscript/data_analysis/accuracy_assessment/*.sh
-!manuscript/data_analysis/accuracy_assessment/*.hmm # Environment files with secrets
+!manuscript/data_analysis/accuracy_assessment/*.hmm
+
+# Environment files with secrets
 .env
 .env.local

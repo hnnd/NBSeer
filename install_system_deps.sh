@@ -5,7 +5,7 @@
 
 set -e
 
-# 定义颜色输出
+# Define color output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -16,7 +16,7 @@ echo -e "${BLUE}🔧 NBSeer System Dependencies Installation${NC}"
 echo -e "${BLUE}Installing system dependencies and Python environment with uv${NC}"
 echo ""
 
-# 检测操作系统
+# Detect operating system
 detect_os() {
     if [ -f /etc/os-release ]; then
         . /etc/os-release
@@ -180,13 +180,13 @@ verify_installation() {
         echo -e "${YELLOW}  ⚠ Virtual environment not found${NC}"
     fi
     
-    # 检查Java版本
+    # Check Java version
     if command -v java &> /dev/null; then
         java_version=$(java -version 2>&1 | head -n1)
         echo -e "${GREEN}  ✓ Java: ${java_version}${NC}"
     fi
     
-    # 检查开发库
+    # Check development libraries
     if ldconfig -p 2>/dev/null | grep -q "libz.so" || [ -f /usr/lib/libz.dylib ] || [ -f /opt/homebrew/lib/libz.dylib ]; then
         echo -e "${GREEN}  ✓ zlib development library${NC}"
     else
@@ -252,7 +252,7 @@ install_uv_and_python_env() {
     echo -e "${GREEN}✓ Python environment setup with uv completed${NC}"
 }
 
-# 主函数
+# Main function
 main() {
     detect_os
     
@@ -281,7 +281,7 @@ main() {
     # Install uv and Python environment
     install_uv_and_python_env
     
-    # 验证安装
+    # Verify installation
     if verify_installation; then
         echo ""
         echo -e "${GREEN}🎉 System dependencies installation completed!${NC}"
@@ -298,12 +298,12 @@ main() {
     fi
 }
 
-# 检查是否有root权限
+# Check if running with root privileges
 if [ "$EUID" -eq 0 ]; then
     echo -e "${YELLOW}⚠️  Running as root${NC}"
 else
     echo -e "${YELLOW}ℹ️  Sudo privileges required for system package installation${NC}"
 fi
 
-# 执行主函数
+# Execute main function
 main "$@"
