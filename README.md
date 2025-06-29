@@ -102,9 +102,9 @@ results/
 
 | Genome Size | Processing Time | Memory Usage | Predicted Genes |
 |-------------|-----------------|--------------|-----------------|
-| 100 Mb | ~0.5 hours | ~8 GB | ~200-500 |
-| 500 Mb | ~1 hours | ~24 GB | ~500-1000 |
-| 3 Gb | ~4 hours | ~64 GB | ~500-1000 |
+| 120 Mb | ~0.5 hours | ~8 GB | ~200-500 |
+| 380 Mb | ~1 hours | ~24 GB | ~500-1000 |
+| 2.8 Gb | ~4 hours | ~64 GB | ~500-1000 |
 
 
 ## Citation
