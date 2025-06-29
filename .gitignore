@@ -133,7 +133,7 @@ uv.lock
 !examples/
 
 # Data
-!data/prgdb/
+!data/prgdb/prg_nbs.fasta
 
 # Tool setup scripts and configurations (but not binaries)
 !tools/setup_*.sh
