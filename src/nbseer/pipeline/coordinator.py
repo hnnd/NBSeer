@@ -889,6 +889,168 @@ class NBSAnnotationPipeline:
             
             raise PipelineError(error_msg, pipeline_stage="full_pipeline") from e
     
+    def run_pipeline_from_stage(
+        self,
+        start_stage: str,
+        genome_path: Path,
+        protein_path: Path,
+        **kwargs: Any,
+    ) -> PipelineResults:
+        """
+        Resume pipeline execution from a specific stage
+        从特定阶段恢复流水线执行
+        
+        Args:
+            start_stage: Stage to start from
+            genome_path: Path to genome FASTA file
+            protein_path: Path to protein FASTA file
+            
+        Returns:
+            Pipeline results from resume point
+        """
+        # Define stage execution order
+        stage_order = [
+            "nlr_localization", 
+            "protein_alignment", 
+            "augustus_training", 
+            "gene_prediction", 
+            "evidence_integration"
+        ]
+        
+        if start_stage not in stage_order:
+            raise PipelineError(f"Invalid start stage: {start_stage}")
+        
+        self.logger.info(f"Resuming pipeline from stage: {start_stage}")
+        
+        # Find the starting index
+        start_idx = stage_order.index(start_stage)
+        
+        # Initialize results
+        self.results.status = "running"
+        self.results.input_files = {
+            "genome": genome_path,
+            "protein": protein_path,
+        }
+        
+        try:
+            # Stage 1: Always validate inputs
+            self.logger.info("Stage 0: Input validation")
+            validation_results = self.validate_inputs(genome_path, protein_path, **kwargs)
+            self.results.stage_results["validation"] = validation_results
+            
+            # Check for existing outputs from previous stages
+            nlr_candidates_file = None
+            alignment_file = None
+            augustus_model_to_use = None
+            
+            # Initialize variables for required files
+            if start_idx > 0:  # If not starting from beginning
+                # Look for NLR candidates from previous run
+                nlr_candidates_file = self.pipeline_output_dir / "nlr_localization" / "NLR_candidates.gff"
+                if not nlr_candidates_file.exists():
+                    raise PipelineError(f"Missing prerequisite: NLR candidates file not found at {nlr_candidates_file}")
+                self.results.output_files["nlr_localization_candidates"] = nlr_candidates_file
+                if "nlr_localization" not in self.results.stages_completed:
+                    self.results.stages_completed.append("nlr_localization")
+            
+            if start_idx > 1:  # If starting after protein alignment
+                # Look for protein alignment results
+                filtered_file = self.pipeline_output_dir / "protein_alignment" / "alignments_filtered.gff"
+                original_file = self.pipeline_output_dir / "protein_alignment" / "alignments.gff"
+                
+                if filtered_file.exists():
+                    alignment_file = filtered_file
+                elif original_file.exists():
+                    alignment_file = original_file
+                else:
+                    raise PipelineError(f"Missing prerequisite: Protein alignment file not found")
+                
+                self.results.output_files["protein_alignment_alignments"] = alignment_file
+                if "protein_alignment" not in self.results.stages_completed:
+                    self.results.stages_completed.append("protein_alignment")
+            
+            # Execute stages from start_stage onwards
+            for stage in stage_order[start_idx:]:
+                if stage == "nlr_localization":
+                    self.logger.info("Stage 1: NLR gene localization")
+                    nlr_results = self.run_nlr_localization(genome_path, **kwargs)
+                    nlr_candidates_file = self.results.output_files["nlr_localization_candidates"]
+                
+                elif stage == "protein_alignment":
+                    self.logger.info("Stage 2: Protein alignment")
+                    alignment_results = self.run_protein_alignment(genome_path, protein_path, **kwargs)
+                    alignment_file = self.results.output_files["protein_alignment_alignments"]
+                
+                elif stage == "augustus_training":
+                    # Check if training is enabled
+                    augustus_config = self.config.get("tools", {}).get("augustus", {})
+                    training_config = augustus_config.get("training", {}).get("miniprot_training", {})
+                    
+                    if training_config.get("enabled", False):
+                        self.logger.info("Stage 3: Augustus model training")
+                        training_results = self.run_augustus_training(**kwargs)
+                        augustus_model_to_use = training_results.get("species_name")
+                    else:
+                        self.logger.info("Stage 3: Augustus training - SKIPPED (disabled)")
+                
+                elif stage == "gene_prediction":
+                    self.logger.info("Stage 4: Gene prediction")
+                    if not nlr_candidates_file:
+                        raise PipelineError("NLR candidates file required for gene prediction")
+                    
+                    prediction_results = self.run_gene_prediction(
+                        nlr_candidates_path=nlr_candidates_file,
+                        training_model=augustus_model_to_use,
+                        **kwargs
+                    )
+                    prediction_file = self.results.output_files["gene_prediction_predictions"]
+                
+                elif stage == "evidence_integration":
+                    self.logger.info("Stage 5: Evidence integration")
+                    if not alignment_file or not nlr_candidates_file:
+                        raise PipelineError("Missing prerequisite files for evidence integration")
+                    
+                    # Get prediction file
+                    prediction_file = self.results.output_files.get("gene_prediction_predictions")
+                    if not prediction_file or not prediction_file.exists():
+                        # Look for existing prediction file
+                        prediction_file = self.pipeline_output_dir / "gene_prediction" / "predictions_genome_coords.gff"
+                        if not prediction_file.exists():
+                            prediction_file = self.pipeline_output_dir / "gene_prediction" / "predictions.gff"
+                        if not prediction_file.exists():
+                            raise PipelineError("Gene prediction file required for evidence integration")
+                    
+                    integration_results = self.run_evidence_integration(
+                        [alignment_file, prediction_file], 
+                        genome_file=genome_path,
+                        nlr_candidates_file=nlr_candidates_file,
+                        **kwargs
+                    )
+            
+            # Pipeline completed successfully
+            self.results.status = "completed"
+            self.results.end_time = datetime.now()
+            
+            # Save results
+            results_file = self.pipeline_output_dir / "pipeline_results.json"
+            self.results.save_to_file(results_file)
+            
+            self.logger.info(f"Pipeline resumed from {start_stage} and completed successfully")
+            return self.results
+            
+        except Exception as e:
+            self.results.status = "failed"
+            self.results.end_time = datetime.now()
+            error_msg = f"Pipeline resume from {start_stage} failed: {e}"
+            self.logger.error(error_msg)
+            self.results.errors.append(error_msg)
+            
+            # Save error results
+            results_file = self.pipeline_output_dir / "pipeline_results.json"
+            self.results.save_to_file(results_file)
+            
+            raise PipelineError(error_msg, pipeline_stage=f"resume_from_{start_stage}") from e
+
     def get_results(self) -> PipelineResults:
         """Get current pipeline results"""
         return self.results

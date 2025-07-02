@@ -77,12 +77,6 @@ Examples / 示例:
         type=str,
         help="Unique pipeline identifier / 唯一流水线标识符",
     )
-    output_group.add_argument(
-        "--format",
-        choices=["gff", "gtf", "json", "all"],
-        default="gff",
-        help="Output format / 输出格式 (default: gff)",
-    )
 
     # Configuration / 配置
     config_group = parser.add_argument_group("Configuration", "配置")
@@ -108,7 +102,8 @@ Examples / 示例:
     )
     pipeline_group.add_argument(
         "--resume-from",
-        type=str,
+        choices=["nlr_localization", "protein_alignment", "augustus_training", 
+                "gene_prediction", "evidence_integration"],
         help="Resume pipeline from specific stage / 从特定阶段恢复流水线",
     )
     pipeline_group.add_argument(
@@ -232,6 +227,15 @@ def validate_arguments(args: argparse.Namespace) -> None:
 
         if args.stage in ["all", "protein_alignment"] and not args.proteins:
             errors.append("Protein file (--proteins) is required")
+        
+        # Special validation for --resume-from
+        if args.resume_from:
+            if args.stage != "all":
+                errors.append("--resume-from can only be used with --stage all")
+            if not args.genome:
+                errors.append("Genome file (--genome) is required when using --resume-from")
+            if not args.proteins:
+                errors.append("Protein file (--proteins) is required when using --resume-from")
 
     # Check file existence
     for file_arg, file_path in [
@@ -461,6 +465,8 @@ def run_pipeline(args: argparse.Namespace) -> bool:
             print(f"  - Genome file: {args.genome}")
             print(f"  - Protein file: {args.proteins}")
             print(f"  - Pipeline stage: {args.stage}")
+            if args.resume_from:
+                print(f"  - Resume from stage: {args.resume_from}")
             print(f"  - Augustus model: {args.augustus_model}")
             print(f"  - Augustus training enabled: {args.enable_training}")
             if args.enable_training:
@@ -477,13 +483,24 @@ def run_pipeline(args: argparse.Namespace) -> bool:
         start_time = time.time()
 
         if args.stage == "all":
-            # Run full pipeline
-            results = pipeline.run_full_pipeline(
-                genome_path=args.genome,
-                protein_path=args.proteins,
-                augustus_model=args.augustus_model,
-                training_species_name=args.training_species_name,
-            )
+            # Run full pipeline or resume from specific stage
+            if args.resume_from:
+                # Resume from specific stage - run remaining stages
+                results = pipeline.run_pipeline_from_stage(
+                    start_stage=args.resume_from,
+                    genome_path=args.genome,
+                    protein_path=args.proteins,
+                    augustus_model=args.augustus_model,
+                    training_species_name=args.training_species_name,
+                )
+            else:
+                # Run full pipeline from beginning
+                results = pipeline.run_full_pipeline(
+                    genome_path=args.genome,
+                    protein_path=args.proteins,
+                    augustus_model=args.augustus_model,
+                    training_species_name=args.training_species_name,
+                )
         # Run specific stage
         elif args.stage == "nlr_localization":
             results = pipeline.run_nlr_localization(genome_path=args.genome)
