@@ -184,6 +184,7 @@ install_augustus() {
     
     # 创建可执行文件链接
     ln -sf "../augustus/bin/augustus" "${TOOLS_DIR}/bin/augustus"
+    ln -sf "../augustus/bin/etraining" "${TOOLS_DIR}/bin/etraining""
     
     # 设置权限
     chmod +x "${augustus_dir}/bin/"*
